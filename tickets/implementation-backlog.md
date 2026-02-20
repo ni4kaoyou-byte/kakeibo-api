@@ -11,6 +11,13 @@
 5. Phase 5: Observability / Audit / Security Hardening
 6. Phase 6: Reliability / Release
 
+## Progress
+
+| ID | Status |
+|---|---|
+| IMP-001 | Done |
+| IMP-002 - IMP-024 | Todo |
+
 ## Tickets Overview
 
 | ID | Phase | Type | Priority | Estimate | Depends On |
@@ -44,6 +51,7 @@
 
 ### IMP-001 開発基盤と品質ゲート整備
 - Type: Task
+- Status: Done
 - Priority: P0
 - Estimate: 1.0d
 - Depends On: -

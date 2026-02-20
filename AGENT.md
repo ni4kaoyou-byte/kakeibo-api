@@ -62,6 +62,8 @@
   - 追加/更新したテスト
   - 実行した検証コマンドと結果
   - `docs/review-checklist.md` の主要確認結果
+- PR作成時は `.github/pull_request_template.md` を必ず使用する。
+- CI（`.github/workflows/ci.yml`）で `build + test` が成功していることをマージ条件にする。
 - レビュー指摘は `Severity / Category / Location / Issue / Impact / Fix` で記録する。
 
 ## 8. Definition of Done
