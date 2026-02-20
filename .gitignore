@@ -44,4 +44,3 @@ bin/
 
 ### Environment ###
 .env
-.env.example
