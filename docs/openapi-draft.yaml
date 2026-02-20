@@ -1,0 +1,446 @@
+openapi: 3.0.3
+info:
+  title: Household Ledger API (Draft)
+  version: 0.1.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /transactions:
+    post:
+      summary: Create transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionCommandRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionView'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /transactions/{id}:
+    patch:
+      summary: Update transaction
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionCommandRequest'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      summary: Delete transaction
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /ledger/transactions:
+    get:
+      summary: List transactions (query side)
+      parameters:
+        - in: query
+          name: from
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: to
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [income, expense]
+        - in: query
+          name: categoryId
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionView'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /ledger/transactions/{id}:
+    get:
+      summary: Get transaction by id (query side)
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionView'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /categories:
+    post:
+      summary: Create category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryCommandRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryView'
+  /categories/{id}:
+    patch:
+      summary: Update category
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryCommandRequest'
+      responses:
+        '204':
+          description: No Content
+    delete:
+      summary: Delete category
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '204':
+          description: No Content
+  /catalog/categories:
+    get:
+      summary: List categories (query side)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryView'
+  /budgets:
+    post:
+      summary: Create budget
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BudgetCommandRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BudgetView'
+  /budgets/{id}:
+    patch:
+      summary: Update budget
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BudgetCommandRequest'
+      responses:
+        '204':
+          description: No Content
+    delete:
+      summary: Delete budget
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '204':
+          description: No Content
+  /planning/budgets:
+    get:
+      summary: List budgets (query side)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BudgetView'
+  /analytics/reports/daily:
+    get:
+      summary: Daily report
+      parameters:
+        - in: query
+          name: date
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportView'
+  /analytics/reports/monthly:
+    get:
+      summary: Monthly report
+      parameters:
+        - in: query
+          name: year
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: month
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 12
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportView'
+  /analytics/reports/yearly:
+    get:
+      summary: Yearly report
+      parameters:
+        - in: query
+          name: year
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportView'
+components:
+  parameters:
+    IdPath:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+        format: int64
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    TransactionCommandRequest:
+      type: object
+      required: [type, amount, transactionDate, categoryId]
+      properties:
+        type:
+          type: string
+          enum: [income, expense]
+        amount:
+          type: integer
+          minimum: 1
+          maximum: 9999999
+        transactionDate:
+          type: string
+          format: date
+        categoryId:
+          type: integer
+          format: int64
+        note:
+          type: string
+          maxLength: 255
+    CategoryCommandRequest:
+      type: object
+      required: [type, name]
+      properties:
+        type:
+          type: string
+          enum: [income, expense]
+        name:
+          type: string
+          minLength: 1
+          maxLength: 30
+        isActive:
+          type: boolean
+    BudgetCommandRequest:
+      type: object
+      required: [yearMonth, amount]
+      properties:
+        categoryId:
+          type: integer
+          format: int64
+          nullable: true
+        yearMonth:
+          type: string
+          pattern: '^\d{4}-(0[1-9]|1[0-2])$'
+        amount:
+          type: integer
+          minimum: 1
+          maximum: 9999999
+    TransactionView:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        type:
+          type: string
+          enum: [income, expense]
+        amount:
+          type: integer
+        transactionDate:
+          type: string
+          format: date
+        note:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CategoryView:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        type:
+          type: string
+          enum: [income, expense]
+        name:
+          type: string
+        isActive:
+          type: boolean
+    BudgetView:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        categoryId:
+          type: integer
+          format: int64
+          nullable: true
+        yearMonth:
+          type: string
+        amount:
+          type: integer
+    ReportView:
+      type: object
+      properties:
+        unit:
+          type: string
+          enum: [daily, monthly, yearly]
+        year:
+          type: integer
+        month:
+          type: integer
+          nullable: true
+        date:
+          type: string
+          format: date
+          nullable: true
+        incomeTotal:
+          type: integer
+        expenseTotal:
+          type: integer
+        balance:
+          type: integer
+    ErrorDetail:
+      type: object
+      properties:
+        field:
+          type: string
+        reason:
+          type: string
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
