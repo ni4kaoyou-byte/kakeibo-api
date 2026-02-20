@@ -14,6 +14,16 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:${KEYCLOAK_PORT:8081}/realms/${KEYCLOAK_REALM:kakeibo-dev}}
+
+app:
+  security:
+    jwt:
+      expected-client-id: ${KEYCLOAK_CLIENT_ID:kakeibo-api-dev-client}
 
 management:
   endpoints:

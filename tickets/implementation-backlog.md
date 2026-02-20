@@ -17,7 +17,8 @@
 |---|---|
 | IMP-001 | Done |
 | IMP-002 | Done |
-| IMP-003 - IMP-024 | Todo |
+| IMP-003 | Done |
+| IMP-004 - IMP-024 | Todo |
 
 ## Tickets Overview
 
@@ -76,6 +77,7 @@
 
 ### IMP-003 Spring Security + JWT Resource Server 実装
 - Type: Story
+- Status: Done
 - Priority: P0
 - Estimate: 1.5d
 - Depends On: IMP-002
