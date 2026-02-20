@@ -16,7 +16,8 @@
 | ID | Status |
 |---|---|
 | IMP-001 | Done |
-| IMP-002 - IMP-024 | Todo |
+| IMP-002 | Done |
+| IMP-003 - IMP-024 | Todo |
 
 ## Tickets Overview
 
@@ -63,6 +64,7 @@
 
 ### IMP-002 OIDCローカル基盤（Keycloak）構築
 - Type: Story
+- Status: Done
 - Priority: P0
 - Estimate: 1.5d
 - Depends On: IMP-001
